@@ -1,0 +1,114 @@
+{
+  "name": "mcp-whatsapp-copilot-extension",
+  "displayName": "MCP WhatsApp Copilot Bridge",
+  "description": "VS Code extension for MCP WhatsApp-GitHub Copilot Bridge",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other",
+    "Extension Packs"
+  ],
+  "keywords": [
+    "whatsapp",
+    "mcp",
+    "github-copilot",
+    "remote",
+    "bridge"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mcpWhatsappCopilot.start",
+        "title": "Start MCP WhatsApp Bridge",
+        "category": "MCP WhatsApp"
+      },
+      {
+        "command": "mcpWhatsappCopilot.stop",
+        "title": "Stop MCP WhatsApp Bridge",
+        "category": "MCP WhatsApp"
+      },
+      {
+        "command": "mcpWhatsappCopilot.status",
+        "title": "Show Bridge Status",
+        "category": "MCP WhatsApp"
+      },
+      {
+        "command": "mcpWhatsappCopilot.openSettings",
+        "title": "Open Settings",
+        "category": "MCP WhatsApp"
+      }
+    ],
+    "configuration": {
+      "title": "MCP WhatsApp Copilot",
+      "properties": {
+        "mcpWhatsappCopilot.serverUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "MCP Server URL"
+        },
+        "mcpWhatsappCopilot.autoStart": {
+          "type": "boolean",
+          "default": false,
+          "description": "Auto-start bridge when VS Code opens"
+        },
+        "mcpWhatsappCopilot.enableLogging": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable detailed logging"
+        },
+        "mcpWhatsappCopilot.sessionTimeout": {
+          "type": "number",
+          "default": 3600,
+          "description": "Session timeout in seconds"
+        }
+      }
+    },
+    "statusBar": [
+      {
+        "id": "mcpWhatsappCopilot.status",
+        "name": "MCP WhatsApp Status",
+        "alignment": "right",
+        "priority": 100
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.2",
+    "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "ws": "^8.14.2",
+    "@types/ws": "^8.5.9"
+  },
+  "publisher": "your-publisher-name",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/mcp-whatsapp-copilot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/mcp-whatsapp-copilot/issues"
+  },
+  "homepage": "https://github.com/yourusername/mcp-whatsapp-copilot#readme",
+  "license": "MIT"
+}
