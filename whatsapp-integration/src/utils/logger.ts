@@ -17,14 +17,12 @@ export class Logger {
             Logger.instance = Logger.createLogger();
         }
         return Logger.instance;
-    }
-
-    /**
+    }    /**
      * Create Winston logger instance
      */
     private static createLogger(): winston.Logger {
-        const logLevel = process.env.LOG_LEVEL || 'info';
-        const logFormat = process.env.NODE_ENV === 'production' ? 'json' : 'console';
+        const logLevel = process.env['LOG_LEVEL'] || 'info';
+        const logFormat = process.env['NODE_ENV'] === 'production' ? 'json' : 'console';
 
         const consoleFormat = winston.format.combine(
             winston.format.timestamp(),
@@ -45,10 +43,8 @@ export class Logger {
             new winston.transports.Console({
                 format: logFormat === 'json' ? jsonFormat : consoleFormat
             })
-        ];
-
-        // Add file transport in production
-        if (process.env.NODE_ENV === 'production') {
+        ];        // Add file transport in production
+        if (process.env['NODE_ENV'] === 'production') {
             transports.push(
                 new winston.transports.File({
                     filename: 'logs/error.log',

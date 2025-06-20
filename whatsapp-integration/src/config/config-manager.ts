@@ -55,11 +55,10 @@ export class ConfigManager {
     /**
      * Load configuration from environment variables
      */
-    private loadConfig() {
-        return {
+    private loadConfig() {        return {
             whatsapp: {
-                sessionPath: process.env.WHATSAPP_SESSION_PATH || './sessions',
-                headless: process.env.WHATSAPP_HEADLESS !== 'false',
+                sessionPath: process.env['WHATSAPP_SESSION_PATH'] || './sessions',
+                headless: process.env['WHATSAPP_HEADLESS'] !== 'false',
                 puppeteerOptions: {
                     args: [
                         '--no-sandbox',
@@ -71,27 +70,27 @@ export class ConfigManager {
                         '--disable-gpu'
                     ]
                 },
-                qrRetries: parseInt(process.env.WHATSAPP_QR_RETRIES || '3'),
-                authTimeoutMs: parseInt(process.env.WHATSAPP_AUTH_TIMEOUT || '60000')
+                qrRetries: parseInt(process.env['WHATSAPP_QR_RETRIES'] || '3'),
+                authTimeoutMs: parseInt(process.env['WHATSAPP_AUTH_TIMEOUT'] || '60000')
             },
             mcp: {
-                serverUrl: process.env.MCP_SERVER_URL || 'http://localhost:8000',
-                timeout: parseInt(process.env.MCP_TIMEOUT || '30000'),
-                retries: parseInt(process.env.MCP_RETRIES || '3'),
-                retryDelay: parseInt(process.env.MCP_RETRY_DELAY || '1000')
+                serverUrl: process.env['MCP_SERVER_URL'] || 'http://localhost:8000',
+                timeout: parseInt(process.env['MCP_TIMEOUT'] || '30000'),
+                retries: parseInt(process.env['MCP_RETRIES'] || '3'),
+                retryDelay: parseInt(process.env['MCP_RETRY_DELAY'] || '1000')
             },
             commands: {
-                prefix: process.env.COMMAND_PREFIX || '/',
-                rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000'),
-                rateLimitMaxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '10'),
-                allowedUsers: process.env.ALLOWED_USERS?.split(',') || [],
-                adminUsers: process.env.ADMIN_USERS?.split(',') || []
+                prefix: process.env['COMMAND_PREFIX'] || '/',
+                rateLimitWindowMs: parseInt(process.env['RATE_LIMIT_WINDOW_MS'] || '60000'),
+                rateLimitMaxRequests: parseInt(process.env['RATE_LIMIT_MAX_REQUESTS'] || '10'),
+                allowedUsers: process.env['ALLOWED_USERS']?.split(',') || [],
+                adminUsers: process.env['ADMIN_USERS']?.split(',') || []
             },
             server: {
-                port: parseInt(process.env.PORT || '3001'),
-                host: process.env.HOST || '0.0.0.0',
-                enableMetrics: process.env.ENABLE_METRICS !== 'false',
-                enableHealthCheck: process.env.ENABLE_HEALTH_CHECK !== 'false'
+                port: parseInt(process.env['PORT'] || '3001'),
+                host: process.env['HOST'] || '0.0.0.0',
+                enableMetrics: process.env['ENABLE_METRICS'] !== 'false',
+                enableHealthCheck: process.env['ENABLE_HEALTH_CHECK'] !== 'false'
             }
         };
     }
