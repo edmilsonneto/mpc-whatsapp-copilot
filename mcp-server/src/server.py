@@ -31,6 +31,9 @@ from .interfaces import (
     IWhatsAppService, ICacheService, IHealthService,
     MCPFunctionRegistry
 )
+from .session_manager import RedisSessionManager, InMemorySessionManager
+from .cache_service import RedisCacheService, InMemoryCacheService
+from .health_service import HealthService
 
 # Configure logging
 logging.basicConfig(
@@ -201,8 +204,7 @@ class MCPServer:
             
             # This would need to be implemented in the session manager
             return {"sessions": []}
-        
-        @app.get("/functions")
+          @app.get("/functions")
         async def list_functions():
             """List available MCP functions."""
             return {
@@ -216,17 +218,39 @@ class MCPServer:
         """Initialize all services."""
         logger.info("Initializing services...")
         
-        # In a real implementation, these would be dependency injected
-        # For now, we'll use placeholder implementations
+        # Initialize Session Manager
+        if self.config.redis:
+            logger.info("Initializing Redis session manager")
+            self.session_manager = RedisSessionManager(self.config.redis)
+            await self.session_manager.connect()
+        else:
+            logger.info("Initializing in-memory session manager")
+            self.session_manager = InMemorySessionManager()
         
-        # TODO: Initialize actual service implementations
-        # self.session_manager = SessionManager(self.config)
-        # self.copilot_service = CopilotService(self.config)        # self.vscode_service = VSCodeService(self.config)
+        # Initialize Cache Service
+        if self.config.redis:
+            logger.info("Initializing Redis cache service")
+            self.cache_service = RedisCacheService(self.config.redis)
+            await self.cache_service.connect()
+        else:
+            logger.info("Initializing in-memory cache service")
+            self.cache_service = InMemoryCacheService()
+            await self.cache_service.connect()
+        
+        # Initialize Health Service
+        self.health_service = HealthService(
+            self.config,
+            self.session_manager,
+            self.cache_service
+        )
+        await self.health_service.start_monitoring()
+        
+        # TODO: Initialize other services when implemented
+        # self.copilot_service = CopilotService(self.config)
+        # self.vscode_service = VSCodeService(self.config)
         # self.whatsapp_service = WhatsAppService(self.config)
-        # self.cache_service = CacheService(self.config)
-        # self.health_service = HealthService(self.config)
         
-        logger.info("Services initialized")
+        logger.info("Services initialized successfully")
     
     def _register_mcp_functions(self) -> None:
         """Register MCP functions."""
