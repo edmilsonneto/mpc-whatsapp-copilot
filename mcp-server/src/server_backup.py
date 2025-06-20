@@ -217,34 +217,20 @@ class MCPServer:
     async def _initialize_services(self) -> None:
         """Initialize all services."""
         logger.info("Initializing services...")
-        
-        # Initialize Session Manager
-        use_redis = (hasattr(self.config, 'redis') and 
-                    self.config.redis.host and 
-                    self.config.redis.host != "localhost")
-        
-        if use_redis:
-            try:
-                logger.info("Initializing Redis session manager")
-                self.session_manager = RedisSessionManager(self.config.redis)
-                await self.session_manager.connect()
-            except Exception as e:
-                logger.warning(f"Failed to connect to Redis for sessions: {e}. Using in-memory fallback.")
-                self.session_manager = InMemorySessionManager()
+          # Initialize Session Manager
+        if self.config.redis.host and self.config.redis.host != "localhost":
+            logger.info("Initializing Redis session manager")
+            self.session_manager = RedisSessionManager(self.config.redis)
+            await self.session_manager.connect()
         else:
             logger.info("Initializing in-memory session manager")
             self.session_manager = InMemorySessionManager()
         
         # Initialize Cache Service
-        if use_redis:
-            try:
-                logger.info("Initializing Redis cache service")
-                self.cache_service = RedisCacheService(self.config.redis)
-                await self.cache_service.connect()
-            except Exception as e:
-                logger.warning(f"Failed to connect to Redis for cache: {e}. Using in-memory fallback.")
-                self.cache_service = InMemoryCacheService()
-                await self.cache_service.connect()
+        if self.config.redis.host and self.config.redis.host != "localhost":
+            logger.info("Initializing Redis cache service")
+            self.cache_service = RedisCacheService(self.config.redis)
+            await self.cache_service.connect()
         else:
             logger.info("Initializing in-memory cache service")
             self.cache_service = InMemoryCacheService()
